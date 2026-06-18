@@ -36,10 +36,10 @@ exports.getById = async (req, res) => {
 
 exports.create = async (req, res) => {
     try {
-        const company = await Company.create(req.body);
-        res.status(201).json(company);
+        const employee = await Employee.create(req.body);
+        res.status(201).json(employee);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 };
 exports.update = async (req, res) => {
@@ -52,8 +52,9 @@ exports.update = async (req, res) => {
 
         await employee.update(req.body);
         res.json(employee);
+        
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 };
 exports.remove = async (req, res) => {

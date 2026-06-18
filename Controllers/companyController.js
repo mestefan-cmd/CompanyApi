@@ -43,9 +43,9 @@ exports.create = async (req, res) => {
     try {
         const company = await Company.create(req.body);
         res.status(201).json(company);
-        
+
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 };
 
@@ -60,7 +60,7 @@ exports.update = async (req, res) => {
         await company.update(req.body);
         res.json(company);
     } catch (err) {
-        res.status(400).json({ error: err.message });
+        res.status(500).json({ error: err.message });
     }
 };
 
