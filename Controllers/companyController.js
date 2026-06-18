@@ -1,0 +1,80 @@
+const { Op, Company } = require('../lib');
+
+exports.getAll = async (req, res) => {
+    try {
+        const { search } = req.query;
+
+        const companies = await Company.findAll({
+            where: search ? {
+                [Op.or]: [
+                    { name:    { [Op.like]: `%${search}%` } },
+                    { email:   { [Op.like]: `%${search}%` } },
+                    { address: { [Op.like]: `%${search}%` } }
+                ]
+            } : {}
+        });
+
+        if (search && companies.length === 0) {
+            return res.status(404).json({ error: 'No companies found matching your search' });
+        }
+
+        res.json(companies);
+
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+exports.getById = async (req, res) => {
+    try {
+        const company = await Company.findByPk(req.params.id);
+
+        if (!company) {
+            return res.status(404).json({ error: 'Company not found' });
+        }
+
+        res.json(company);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
+
+exports.create = async (req, res) => {
+    try {
+        const company = await Company.create(req.body);
+        res.status(201).json(company);
+        
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
+exports.update = async (req, res) => {
+    try {
+        const company = await Company.findByPk(req.params.id);
+
+        if (!company) {
+            return res.status(404).json({ error: 'Company not found' });
+        }
+
+        await company.update(req.body);
+        res.json(company);
+    } catch (err) {
+        res.status(400).json({ error: err.message });
+    }
+};
+
+exports.remove = async (req, res) => {
+    try {
+        const company = await Company.findByPk(req.params.id);
+
+        if (!company) {
+            return res.status(404).json({ error: 'Company not found' });
+        }
+
+        await company.destroy();
+        res.status(204).send();
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
+};
