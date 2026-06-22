@@ -27,16 +27,32 @@ paths:
           schema:
             type: string
           example: BAE
+        - in: query
+          name: page
+          required: false
+          schema:
+            type: integer
+          example: 1
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+          example: 10
       responses:
         '200':
           description: List of companies
           content:
             application/json:
               example:
-                - id: 1
-                  name: BAE
-                  email: contact@bae.com
-                  address: KHBP
+                total: 42
+                page: 1
+                totalPages: 5
+                data:
+                  - id: 1
+                    name: BAE
+                    email: contact@bae.com
+                    address: KHBP
         '404':
           description: No companies found
           content:
@@ -204,16 +220,32 @@ paths:
           schema:
             type: string
           example: Mousa
+        - in: query
+          name: offset
+          required: false
+          schema:
+            type: integer
+          example: 0
+        - in: query
+          name: limit
+          required: false
+          schema:
+            type: integer
+          example: 10
       responses:
         '200':
           description: List of employees
           content:
             application/json:
               example:
-                - id: 1
-                  name: Mousa Estefan
-                  email: mousa@test.com
-                  company_id: 1
+                total: 30
+                offset: 0
+                limit: 10
+                data:
+                  - id: 1
+                    name: Mousa Estefan
+                    email: mousa@test.com
+                    company_id: 1
         '404':
           description: No employees found matching the search criteria
           content:
