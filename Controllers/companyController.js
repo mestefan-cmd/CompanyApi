@@ -2,7 +2,7 @@ const { Op, Company, Category } = require('../lib');
 
 exports.getAll = async (req, res) => {
     try {
-        const { search, page, limit } = req.query;
+        const { search, category, page, limit } = req.query;
 
         const pageNum  = parseInt(page)  || 1;
         const limitNum = parseInt(limit) || 10;
@@ -16,17 +16,21 @@ exports.getAll = async (req, res) => {
                     { address: { [Op.like]: `%${search}%` } }
                 ]
             } : {},
-            include: [{ model: Category, through: { attributes: [] } }],
+            include: [{
+                model: Category,
+                through: { attributes: [] },
+                ...(category ? { where: { name: { [Op.like]: `%${category}%` } } } : {})
+            }],
             limit:  limitNum,
             offset,
             distinct: true
         });
 
-        if (search && companies.length === 0) {
+        if ((search || category) && companies.length === 0) {
             return res.status(404).json({ error: 'No companies found matching your search' });
         }
 
-        res.status(200).json({
+        res.status(206).json({
             total:      count,
             page:       pageNum,
             totalPages: Math.ceil(count / limitNum),
@@ -34,7 +38,7 @@ exports.getAll = async (req, res) => {
         });
 
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(503).json({ error: err.message });
     }
 };
 
@@ -50,7 +54,7 @@ exports.getById = async (req, res) => {
 
         res.status(200).json(company);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(503).json({ error: err.message });
     }
 };
 
@@ -63,13 +67,11 @@ exports.create = async (req, res) => {
             await company.setCategories(categoryIds);
         }
 
-        const result = await Company.findByPk(company.id, {
-            include: [{ model: Category, through: { attributes: [] } }]
-        });
+        company.dataValues.Categories = await company.getCategories({ joinTableAttributes: [] });
 
-        res.status(201).json(result);
+        res.status(202).json(company);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(422).json({ error: err.message });
     }
 };
 
@@ -88,13 +90,11 @@ exports.update = async (req, res) => {
             await company.setCategories(categoryIds);
         }
 
-        const result = await Company.findByPk(company.id, {
-            include: [{ model: Category, through: { attributes: [] } }]
-        });
+        company.dataValues.Categories = await company.getCategories({ joinTableAttributes: [] });
 
-        res.status(200).json(result);
+        res.status(204).send();
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(503).json({ error: err.message });
     }
 };
 
@@ -103,12 +103,12 @@ exports.remove = async (req, res) => {
         const company = await Company.findByPk(req.params.id);
 
         if (!company) {
-            return res.status(404).json({ error: 'Company not found' });
+            return res.status(410).json({ error: 'Company not found' });
         }
 
              await company.destroy();
         res.status(204).send();
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(503).json({ error: err.message });
     }
 };

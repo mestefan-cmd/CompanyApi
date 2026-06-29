@@ -18,6 +18,10 @@
     {
       "name": "Employees",
       "description": "Employee endpoints"
+    },
+    {
+      "name": "Categories",
+      "description": "Category endpoints"
     }
   ],
   "components": {
@@ -90,10 +94,10 @@
                   "limit": 10,
                   "data": [
                     {
-                      "id": 1,
+                      "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                       "name": "Mousa Estefan",
                       "email": "mousa@test.com",
-                      "company_id": 1
+                      "company_id": "d290f1ee-6c54-4b01-90e6-d701748f0851"
                     }
                   ]
                 }
@@ -147,10 +151,10 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "Mousa Estefan",
                   "email": "mousa@test.com",
-                  "company_id": 1
+                  "company_id": "d290f1ee-6c54-4b01-90e6-d701748f0851"
                 }
               }
             }
@@ -182,10 +186,10 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "Mousa Estefan",
                   "email": "mousa@test.com",
-                  "company_id": 1
+                  "company_id": "d290f1ee-6c54-4b01-90e6-d701748f0851"
                 }
               }
             }
@@ -240,10 +244,10 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "Updated Employee",
                   "email": "updated@test.com",
-                  "company_id": 1
+                  "company_id": "d290f1ee-6c54-4b01-90e6-d701748f0851"
                 }
               }
             }
@@ -300,6 +304,16 @@
           },
           {
             "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filter companies by category name",
+            "example": "tech"
+          },
+          {
+            "in": "query",
             "name": "page",
             "required": false,
             "schema": {
@@ -328,7 +342,7 @@
                   "totalPages": 5,
                   "data": [
                     {
-                      "id": 1,
+                      "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                       "name": "BAE",
                       "email": "contact@bae.com",
                       "address": "KHBP"
@@ -395,13 +409,13 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "SwaggerDefault",
                   "email": "swagger@contact.com",
                   "address": "KHBP",
                   "Categories": [
                     {
-                      "id": 1,
+                      "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                       "name": "tech"
                     }
                   ]
@@ -436,7 +450,7 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "BAE",
                   "email": "contact@bae.com",
                   "address": "KHBP"
@@ -505,7 +519,7 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "Updated Company",
                   "email": "updated@company.com",
                   "address": "New Address"

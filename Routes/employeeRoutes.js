@@ -38,10 +38,10 @@ const router = express.Router();
  *               offset: 0
  *               limit: 10
  *               data:
- *                 - id: 1
+ *                 - id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *                   name: Mousa Estefan
  *                   email: mousa@test.com
- *                   company_id: 1
+ *                   company_id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
  *       '500':
@@ -67,10 +67,10 @@ router.get('/',    controller.getAll);
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: Mousa Estefan
  *               email: mousa@test.com
- *               company_id: 1
+ *               company_id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
  *       '500':
@@ -110,10 +110,10 @@ router.get('/:id', controller.getById);
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: Mousa Estefan
  *               email: mousa@test.com
- *               company_id: 1
+ *               company_id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *       '500':
  *         $ref: '#/components/responses/InternalServerError'
  */
@@ -151,10 +151,10 @@ router.post('/',   controller.create);
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: Updated Employee
  *               email: updated@test.com
- *               company_id: 1
+ *               company_id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
  *       '500':

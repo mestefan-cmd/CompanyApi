@@ -17,6 +17,13 @@ const router = express.Router();
  *           type: string
  *         example: BAE
  *       - in: query
+ *         name: category
+ *         required: false
+ *         schema:
+ *           type: string
+ *         description: Filter companies by category name
+ *         example: tech
+ *       - in: query
  *         name: page
  *         required: false
  *         schema:
@@ -38,7 +45,7 @@ const router = express.Router();
  *               page: 1
  *               totalPages: 5
  *               data:
- *                 - id: 1
+ *                 - id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *                   name: BAE
  *                   email: contact@bae.com
  *                   address: KHBP
@@ -67,7 +74,7 @@ router.get('/',    controller.getAll);
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: BAE
  *               email: contact@bae.com
  *               address: KHBP
@@ -115,12 +122,12 @@ router.get('/:id', controller.getById);
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: SwaggerDefault
  *               email: swagger@contact.com
  *               address: KHBP
  *               Categories:
- *                 - id: 1
+ *                 - id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *                   name: tech
  *       '500':
  *         $ref: '#/components/responses/InternalServerError'
@@ -165,7 +172,7 @@ router.post('/',   controller.create);
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: Updated Company
  *               email: updated@company.com
  *               address: New Address

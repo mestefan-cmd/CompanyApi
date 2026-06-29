@@ -22,7 +22,7 @@ exports.getAll = async (req, res) => {
             return res.status(404).json({ error: 'No employees found matching your search' });
         }
 
-        res.status(200).json({
+        res.status(206).json({
             total:  count,
             offset: offsetNum,
             limit:  limitNum,
@@ -30,7 +30,7 @@ exports.getAll = async (req, res) => {
         });
 
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(503).json({ error: err.message });
     }
 };
 
@@ -44,16 +44,16 @@ exports.getById = async (req, res) => {
 
         res.status(200).json(employee);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(503).json({ error: err.message });
     }
 };
 
 exports.create = async (req, res) => {
     try {
         const employee = await Employee.create(req.body);
-        res.status(201).json(employee);
+        res.status(202).json(employee);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(422).json({ error: err.message });
     }
 };
 
@@ -66,9 +66,9 @@ exports.update = async (req, res) => {
         }
 
         await employee.update(req.body);
-        res.status(200).json(employee);
+        res.status(204).send();
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(503).json({ error: err.message });
     }
 };
 
@@ -77,12 +77,12 @@ exports.remove = async (req, res) => {
         const employee = await Employee.findByPk(req.params.id);
 
         if (!employee) {
-            return res.status(404).json({ error: 'Employee not found' });
+            return res.status(410).json({ error: 'Employee not found' });
         }
 
         await employee.destroy();
         res.status(204).send();
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(503).json({ error: err.message });
     }
 };

@@ -5,16 +5,16 @@ exports.getAll = async (req, res) => {
         const categories = await Category.findAll();
         res.status(200).json(categories);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(503).json({ error: err.message });
     }
 };
 
 exports.create = async (req, res) => {
     try {
         const category = await Category.create({ name: req.body.name });
-        res.status(201).json(category);
+        res.status(202).json(category);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(422).json({ error: err.message });
     }
 };
 
@@ -23,12 +23,12 @@ exports.remove = async (req, res) => {
         const category = await Category.findByPk(req.params.id);
 
         if (!category) {
-            return res.status(404).json({ error: 'Category not found' });
+            return res.status(410).json({ error: 'Category not found' });
         }
 
         await category.destroy();
         res.status(204).send();
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(503).json({ error: err.message });
     }
 };
