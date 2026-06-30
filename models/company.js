@@ -23,6 +23,7 @@ const Company = sequelize.define('Company', {
     timestamps: true,
     paranoid: true,
     underscored: true,
+    updatedAt: true,
     defaultScope: {
         attributes: { exclude: ['deletedAt', 'deleted_at'] }
     },

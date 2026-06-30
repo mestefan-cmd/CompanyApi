@@ -24,6 +24,7 @@ const Employee = sequelize.define('Employee', {
     timestamps: true,
     paranoid: true,
     underscored: true,
+    updatedAt: true,
     defaultScope: {
         attributes: { exclude: ['deletedAt', 'deleted_at'] }
     }

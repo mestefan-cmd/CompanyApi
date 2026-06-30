@@ -6,7 +6,7 @@ exports.register = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        const hashedPassword = await bcrypt.hash(password, 40);
+        const hashedPassword = await bcrypt.hash(password, 10);
 
         const user = await User.create({ email, password: hashedPassword });
 
