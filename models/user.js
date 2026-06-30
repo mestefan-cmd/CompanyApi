@@ -1,32 +1,33 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
-const Employee = sequelize.define('Employee', {
+const User = sequelize.define('User', {
     id: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true
     },
-    name: {
-        type: DataTypes.STRING,
-        allowNull: false
-    },
     email: {
         type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
         validate: { isEmail: true }
     },
-    company_id: {
-        type: DataTypes.UUID,
-        references: { model: 'companies', key: 'id' }
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false
     }
 }, {
-    tableName: 'employees',
+    tableName: 'users',
     timestamps: true,
-    paranoid: true,
     underscored: true,
+    updatedAt: false,
     defaultScope: {
-        attributes: { exclude: ['deletedAt', 'deleted_at'] }
+        attributes: { exclude: ['password', 'deletedAt', 'deleted_at'] }
+    },
+    scopes: {
+        withPassword: { attributes: {} }
     }
 });
 
-module.exports = Employee;
+module.exports = User;

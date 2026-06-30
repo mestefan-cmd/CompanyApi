@@ -16,11 +16,19 @@ const options = {
             }
         ],
         tags: [
-            { name: 'Companies', description: 'Company endpoints' },
-            { name: 'Employees', description: 'Employee endpoints' },
+            { name: 'Auth',       description: 'Authentication endpoints' },
+            { name: 'Companies',  description: 'Company endpoints' },
+            { name: 'Employees',  description: 'Employee endpoints' },
             { name: 'Categories', description: 'Category endpoints' }
         ],
         components: {
+            securitySchemes: {
+                BearerAuth: {
+                    type: 'http',
+                    scheme: 'bearer',
+                    bearerFormat: 'JWT'
+                }
+            },
             responses: {
                 InternalServerError: {
                     description: 'Internal server error',
@@ -43,7 +51,8 @@ const options = {
                     }
                 }
             }
-        }
+        },
+        security: [{ BearerAuth: [] }]
     },
     apis: ['./Routes/*.js'],
 };

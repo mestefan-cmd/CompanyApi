@@ -23,7 +23,9 @@ const Company = sequelize.define('Company', {
     timestamps: true,
     paranoid: true,
     underscored: true,
-    updatedAt: false,
+    defaultScope: {
+        attributes: { exclude: ['deletedAt', 'deleted_at'] }
+    },
     indexes: [
         {
             unique: true,

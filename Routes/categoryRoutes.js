@@ -16,9 +16,9 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             example:
- *               - id: 1
+ *               - id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *                 name: tech
- *               - id: 2
+ *               - id: '3874e4db-3eb3-4db0-9377-511ceba772e0'
  *                 name: frontend
  *       '500':
  *         $ref: '#/components/responses/InternalServerError'
@@ -50,7 +50,7 @@ router.get('/', controller.getAll);
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: tech
  *       '500':
  *         $ref: '#/components/responses/InternalServerError'
