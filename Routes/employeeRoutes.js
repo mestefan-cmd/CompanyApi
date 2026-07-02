@@ -15,19 +15,19 @@ const router = express.Router();
  *         required: false
  *         schema:
  *           type: string
- *         example: Mousa
+ *           example: Mousa
  *       - in: query
  *         name: offset
  *         required: false
  *         schema:
  *           type: integer
- *         example: 0
+ *           example: 0
  *       - in: query
  *         name: limit
  *         required: false
  *         schema:
  *           type: integer
- *         example: 10
+ *           example: 10
  *     responses:
  *       '200':
  *         description: List of employees
@@ -38,16 +38,16 @@ const router = express.Router();
  *               offset: 0
  *               limit: 10
  *               data:
- *                 - id: 1
+ *                 - id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *                   name: Mousa Estefan
  *                   email: mousa@test.com
- *                   company_id: 1
+ *                   company_id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
  */
-router.get('/',    controller.getAll);
+router.get('/', controller.getAll);
 
 /**
  * @swagger
@@ -60,21 +60,22 @@ router.get('/',    controller.getAll);
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
+ *           format: uuid
  *     responses:
  *       '200':
  *         description: Employee found
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: Mousa Estefan
  *               email: mousa@test.com
- *               company_id: 1
+ *               company_id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
  */
 router.get('/:id', controller.getById);
 
@@ -102,22 +103,27 @@ router.get('/:id', controller.getById);
  *                 format: email
  *                 example: mousa@test.com
  *               company_id:
- *                 type: integer
- *                 example: 1
+ *                 type: string
+ *                 format: uuid
+ *                 example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *     responses:
  *       '201':
  *         description: Employee created successfully
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: Mousa Estefan
  *               email: mousa@test.com
- *               company_id: 1
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *               company_id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
+ *       '422':
+ *         $ref: '#/components/responses/ValidationError'
+ *       '409':
+ *         $ref: '#/components/responses/ConflictError'
  */
-router.post('/',   controller.create);
+router.post('/', controller.create);
 
 /**
  * @swagger
@@ -130,7 +136,8 @@ router.post('/',   controller.create);
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
+ *           format: uuid
  *     requestBody:
  *       required: true
  *       content:
@@ -140,25 +147,33 @@ router.post('/',   controller.create);
  *             properties:
  *               name:
  *                 type: string
+ *                 example: Updated Employee
  *               email:
  *                 type: string
  *                 format: email
+ *                 example: updated@test.com
  *               company_id:
- *                 type: integer
+ *                 type: string
+ *                 format: uuid
+ *                 example: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *     responses:
  *       '200':
  *         description: Employee updated successfully
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: Updated Employee
  *               email: updated@test.com
- *               company_id: 1
+ *               company_id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
+ *       '422':
+ *         $ref: '#/components/responses/ValidationError'
+ *       '409':
+ *         $ref: '#/components/responses/ConflictError'
  */
 router.put('/:id', controller.update);
 
@@ -173,14 +188,15 @@ router.put('/:id', controller.update);
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
+ *           format: uuid
  *     responses:
  *       '204':
  *         description: Employee deleted successfully
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
  */
 router.delete('/:id', controller.remove);
 

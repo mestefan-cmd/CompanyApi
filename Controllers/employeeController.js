@@ -30,7 +30,10 @@ exports.getAll = async (req, res) => {
         });
 
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(400).json({ 
+            error: 'Request Failed', 
+            message: 'Unable to fetch employees due to an unexpected system error.' 
+        });
     }
 };
 
@@ -44,7 +47,10 @@ exports.getById = async (req, res) => {
 
         res.status(200).json(employee);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(400).json({ 
+            error: 'Request Failed', 
+            message: 'Invalid employee ID format provided.' 
+        });
     }
 };
 
@@ -53,7 +59,24 @@ exports.create = async (req, res) => {
         const employee = await Employee.create(req.body);
         res.status(201).json(employee);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        if (err.name === 'SequelizeValidationError') {
+            return res.status(422).json({ 
+                error: 'Validation failed', 
+                details: err.errors.map(e => e.message) 
+            });
+        }
+
+        if (err.name === 'SequelizeUniqueConstraintError') {
+            return res.status(409).json({ 
+                error: 'Data conflict', 
+                message: 'An employee with this unique record already exists.' 
+            });
+        }
+
+        res.status(400).json({ 
+            error: 'Request Failed', 
+            message: 'Unable to process employee creation due to bad input data structure.' 
+        });
     }
 };
 
@@ -68,7 +91,24 @@ exports.update = async (req, res) => {
         await employee.update(req.body);
         res.status(200).json(employee);
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        if (err.name === 'SequelizeValidationError') {
+            return res.status(422).json({ 
+                error: 'Validation failed', 
+                details: err.errors.map(e => e.message) 
+            });
+        }
+
+        if (err.name === 'SequelizeUniqueConstraintError') {
+            return res.status(409).json({ 
+                error: 'Data conflict', 
+                message: 'This update conflicts with an existing unique record.' 
+            });
+        }
+
+        res.status(400).json({ 
+            error: 'Request Failed', 
+            message: 'Unable to process employee update due to bad input formatting.' 
+        });
     }
 };
 
@@ -83,6 +123,9 @@ exports.remove = async (req, res) => {
         await employee.destroy();
         res.status(204).send();
     } catch (err) {
-        res.status(500).json({ error: err.message });
+        res.status(400).json({ 
+            error: 'Request Failed', 
+            message: 'Invalid employee ID format or database restriction prevented deletion.' 
+        });
     }
 };

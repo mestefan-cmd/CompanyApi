@@ -2,6 +2,11 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../db');
 
 const Company = sequelize.define('Company', {
+    id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true
+    },
     name: {
         type: DataTypes.STRING,
         allowNull: false
@@ -18,7 +23,10 @@ const Company = sequelize.define('Company', {
     timestamps: true,
     paranoid: true,
     underscored: true,
-    updatedAt: false,
+    updatedAt: true,
+    defaultScope: {
+        attributes: { exclude: ['deletedAt', 'deleted_at'] }
+    },
     indexes: [
         {
             unique: true,

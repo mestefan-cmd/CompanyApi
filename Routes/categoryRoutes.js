@@ -16,12 +16,12 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             example:
- *               - id: 1
+ *               - id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *                 name: tech
- *               - id: 2
+ *               - id: '3874e4db-3eb3-4db0-9377-511ceba772e0'
  *                 name: frontend
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
  */
 router.get('/', controller.getAll);
 
@@ -50,10 +50,14 @@ router.get('/', controller.getAll);
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: tech
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
+ *       '422':
+ *         $ref: '#/components/responses/ValidationError'
+ *       '409':
+ *         $ref: '#/components/responses/ConflictError'
  */
 router.post('/', controller.create);
 
@@ -64,20 +68,21 @@ router.post('/', controller.create);
  *     tags:
  *       - Categories
  *     summary: Delete a category
- *     description: Deletes a category and removes it from all associated companies. Companies themselves are not affected.
+ *     description: Deletes a category and removes it from all associated companies.
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
+ *           format: uuid
  *     responses:
  *       '204':
  *         description: Category deleted successfully
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
  */
 router.delete('/:id', controller.remove);
 

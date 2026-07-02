@@ -15,19 +15,26 @@ const router = express.Router();
  *         required: false
  *         schema:
  *           type: string
- *         example: BAE
+ *           example: BAE
+ *       - in: query
+ *         name: category
+ *         required: false
+ *         schema:
+ *           type: string
+ *           description: Filter companies by category name
+ *           example: tech
  *       - in: query
  *         name: page
  *         required: false
  *         schema:
  *           type: integer
- *         example: 1
+ *           example: 1
  *       - in: query
  *         name: limit
  *         required: false
  *         schema:
  *           type: integer
- *         example: 10
+ *           example: 10
  *     responses:
  *       '200':
  *         description: List of companies
@@ -38,16 +45,16 @@ const router = express.Router();
  *               page: 1
  *               totalPages: 5
  *               data:
- *                 - id: 1
+ *                 - id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *                   name: BAE
  *                   email: contact@bae.com
  *                   address: KHBP
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
  */
-router.get('/',    controller.getAll);
+router.get('/', controller.getAll);
 
 /**
  * @swagger
@@ -60,21 +67,22 @@ router.get('/',    controller.getAll);
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
+ *           format: uuid
  *     responses:
  *       '200':
  *         description: Company found
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: BAE
  *               email: contact@bae.com
  *               address: KHBP
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
  */
 router.get('/:id', controller.getById);
 
@@ -106,8 +114,9 @@ router.get('/:id', controller.getById);
  *               categoryIds:
  *                 type: array
  *                 items:
- *                   type: integer
- *                 example: [1, 2]
+ *                   type: string
+ *                   format: uuid
+ *                 example: ['d290f1ee-6c54-4b01-90e6-d701748f0851']
  *                 description: Optional array of category IDs to link to this company
  *     responses:
  *       '201':
@@ -115,17 +124,21 @@ router.get('/:id', controller.getById);
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: SwaggerDefault
  *               email: swagger@contact.com
  *               address: KHBP
  *               Categories:
- *                 - id: 1
+ *                 - id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *                   name: tech
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
+ *       '422':
+ *         $ref: '#/components/responses/ValidationError'
+ *       '409':
+ *         $ref: '#/components/responses/ConflictError'
  */
-router.post('/',   controller.create);
+router.post('/', controller.create);
 
 /**
  * @swagger
@@ -138,7 +151,8 @@ router.post('/',   controller.create);
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
+ *           format: uuid
  *     requestBody:
  *       required: true
  *       content:
@@ -156,8 +170,9 @@ router.post('/',   controller.create);
  *               categoryIds:
  *                 type: array
  *                 items:
- *                   type: integer
- *                 example: [1, 3]
+ *                   type: string
+ *                   format: uuid
+ *                 example: ['d290f1ee-6c54-4b01-90e6-d701748f0851']
  *                 description: Replaces all linked categories with this new list
  *     responses:
  *       '200':
@@ -165,14 +180,18 @@ router.post('/',   controller.create);
  *         content:
  *           application/json:
  *             example:
- *               id: 1
+ *               id: 'd290f1ee-6c54-4b01-90e6-d701748f0851'
  *               name: Updated Company
  *               email: updated@company.com
  *               address: New Address
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
+ *       '422':
+ *         $ref: '#/components/responses/ValidationError'
+ *       '409':
+ *         $ref: '#/components/responses/ConflictError'
  */
 router.put('/:id', controller.update);
 
@@ -187,14 +206,15 @@ router.put('/:id', controller.update);
  *         name: id
  *         required: true
  *         schema:
- *           type: integer
+ *           type: string
+ *           format: uuid
  *     responses:
  *       '204':
  *         description: Company deleted successfully
  *       '404':
  *         $ref: '#/components/responses/NotFoundError'
- *       '500':
- *         $ref: '#/components/responses/InternalServerError'
+ *       '400':
+ *         $ref: '#/components/responses/BadRequestError'
  */
 router.delete('/:id', controller.remove);
 

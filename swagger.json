@@ -18,26 +18,56 @@
     {
       "name": "Employees",
       "description": "Employee endpoints"
+    },
+    {
+      "name": "Categories",
+      "description": "Category endpoints"
     }
   ],
   "components": {
     "responses": {
-      "InternalServerError": {
-        "description": "Internal server error",
+      "BadRequestError": {
+        "description": "Request failed fallback",
         "content": {
           "application/json": {
             "example": {
-              "error": "Internal server error"
+              "error": "Request Failed",
+              "message": "Unable to process request due to bad input data structure."
             }
           }
         }
       },
       "NotFoundError": {
-        "description": "Not found",
+        "description": "Resource not found",
         "content": {
           "application/json": {
             "example": {
               "error": "Not found"
+            }
+          }
+        }
+      },
+      "ValidationError": {
+        "description": "Data values fail validation constraints",
+        "content": {
+          "application/json": {
+            "example": {
+              "error": "Validation failed",
+              "details": [
+                "email must be a valid email",
+                "name cannot be null"
+              ]
+            }
+          }
+        }
+      },
+      "ConflictError": {
+        "description": "Unique data attribute conflict",
+        "content": {
+          "application/json": {
+            "example": {
+              "error": "Data conflict",
+              "message": "A record with this unique attribute already exists."
             }
           }
         }
@@ -56,27 +86,27 @@
             "name": "search",
             "required": false,
             "schema": {
-              "type": "string"
-            },
-            "example": "Mousa"
+              "type": "string",
+              "example": "Mousa"
+            }
           },
           {
             "in": "query",
             "name": "offset",
             "required": false,
             "schema": {
-              "type": "integer"
-            },
-            "example": 0
+              "type": "integer",
+              "example": 0
+            }
           },
           {
             "in": "query",
             "name": "limit",
             "required": false,
             "schema": {
-              "type": "integer"
-            },
-            "example": 10
+              "type": "integer",
+              "example": 10
+            }
           }
         ],
         "responses": {
@@ -90,21 +120,21 @@
                   "limit": 10,
                   "data": [
                     {
-                      "id": 1,
+                      "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                       "name": "Mousa Estefan",
                       "email": "mousa@test.com",
-                      "company_id": 1
+                      "company_id": "d290f1ee-6c54-4b01-90e6-d701748f0851"
                     }
                   ]
                 }
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundError"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -133,8 +163,9 @@
                     "example": "mousa@test.com"
                   },
                   "company_id": {
-                    "type": "integer",
-                    "example": 1
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
                   }
                 }
               }
@@ -147,16 +178,22 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "Mousa Estefan",
                   "email": "mousa@test.com",
-                  "company_id": 1
+                  "company_id": "d290f1ee-6c54-4b01-90e6-d701748f0851"
                 }
               }
             }
           },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           }
         }
       }
@@ -172,7 +209,8 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -182,19 +220,19 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "Mousa Estefan",
                   "email": "mousa@test.com",
-                  "company_id": 1
+                  "company_id": "d290f1ee-6c54-4b01-90e6-d701748f0851"
                 }
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundError"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -208,7 +246,8 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -220,14 +259,18 @@
                 "type": "object",
                 "properties": {
                   "name": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Updated Employee"
                   },
                   "email": {
                     "type": "string",
-                    "format": "email"
+                    "format": "email",
+                    "example": "updated@test.com"
                   },
                   "company_id": {
-                    "type": "integer"
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "d290f1ee-6c54-4b01-90e6-d701748f0851"
                   }
                 }
               }
@@ -240,19 +283,25 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "Updated Employee",
                   "email": "updated@test.com",
-                  "company_id": 1
+                  "company_id": "d290f1ee-6c54-4b01-90e6-d701748f0851"
                 }
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundError"
           },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           }
         }
       },
@@ -266,7 +315,8 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -274,11 +324,11 @@
           "204": {
             "description": "Employee deleted successfully"
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundError"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -294,27 +344,37 @@
             "name": "search",
             "required": false,
             "schema": {
-              "type": "string"
-            },
-            "example": "BAE"
+              "type": "string",
+              "example": "BAE"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Filter companies by category name",
+              "example": "tech"
+            }
           },
           {
             "in": "query",
             "name": "page",
             "required": false,
             "schema": {
-              "type": "integer"
-            },
-            "example": 1
+              "type": "integer",
+              "example": 1
+            }
           },
           {
             "in": "query",
             "name": "limit",
             "required": false,
             "schema": {
-              "type": "integer"
-            },
-            "example": 10
+              "type": "integer",
+              "example": 10
+            }
           }
         ],
         "responses": {
@@ -328,7 +388,7 @@
                   "totalPages": 5,
                   "data": [
                     {
-                      "id": 1,
+                      "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                       "name": "BAE",
                       "email": "contact@bae.com",
                       "address": "KHBP"
@@ -338,11 +398,11 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundError"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -376,11 +436,11 @@
                   "categoryIds": {
                     "type": "array",
                     "items": {
-                      "type": "integer"
+                      "type": "string",
+                      "format": "uuid"
                     },
                     "example": [
-                      1,
-                      2
+                      "d290f1ee-6c54-4b01-90e6-d701748f0851"
                     ],
                     "description": "Optional array of category IDs to link to this company"
                   }
@@ -395,13 +455,13 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "SwaggerDefault",
                   "email": "swagger@contact.com",
                   "address": "KHBP",
                   "Categories": [
                     {
-                      "id": 1,
+                      "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                       "name": "tech"
                     }
                   ]
@@ -409,8 +469,14 @@
               }
             }
           },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           }
         }
       }
@@ -426,7 +492,8 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -436,7 +503,7 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "BAE",
                   "email": "contact@bae.com",
                   "address": "KHBP"
@@ -444,11 +511,11 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundError"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
           }
         }
       },
@@ -462,7 +529,8 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -486,11 +554,11 @@
                   "categoryIds": {
                     "type": "array",
                     "items": {
-                      "type": "integer"
+                      "type": "string",
+                      "format": "uuid"
                     },
                     "example": [
-                      1,
-                      3
+                      "d290f1ee-6c54-4b01-90e6-d701748f0851"
                     ],
                     "description": "Replaces all linked categories with this new list"
                   }
@@ -505,7 +573,7 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "Updated Company",
                   "email": "updated@company.com",
                   "address": "New Address"
@@ -513,11 +581,17 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundError"
           },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           }
         }
       },
@@ -531,7 +605,8 @@
             "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -539,11 +614,11 @@
           "204": {
             "description": "Company deleted successfully"
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundError"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
@@ -561,19 +636,19 @@
               "application/json": {
                 "example": [
                   {
-                    "id": 1,
+                    "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                     "name": "tech"
                   },
                   {
-                    "id": 2,
+                    "id": "3874e4db-3eb3-4db0-9377-511ceba772e0",
                     "name": "frontend"
                   }
                 ]
               }
             }
           },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
           }
         }
       },
@@ -607,14 +682,20 @@
             "content": {
               "application/json": {
                 "example": {
-                  "id": 1,
+                  "id": "d290f1ee-6c54-4b01-90e6-d701748f0851",
                   "name": "tech"
                 }
               }
             }
           },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
+          "409": {
+            "$ref": "#/components/responses/ConflictError"
+          },
+          "422": {
+            "$ref": "#/components/responses/ValidationError"
           }
         }
       }
@@ -625,14 +706,15 @@
           "Categories"
         ],
         "summary": "Delete a category",
-        "description": "Deletes a category and removes it from all associated companies. Companies themselves are not affected.",
+        "description": "Deletes a category and removes it from all associated companies.",
         "parameters": [
           {
             "in": "path",
             "name": "id",
             "required": true,
             "schema": {
-              "type": "integer"
+              "type": "string",
+              "format": "uuid"
             }
           }
         ],
@@ -640,11 +722,11 @@
           "204": {
             "description": "Category deleted successfully"
           },
+          "400": {
+            "$ref": "#/components/responses/BadRequestError"
+          },
           "404": {
             "$ref": "#/components/responses/NotFoundError"
-          },
-          "500": {
-            "$ref": "#/components/responses/InternalServerError"
           }
         }
       }
